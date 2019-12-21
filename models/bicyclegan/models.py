@@ -7,12 +7,13 @@ from torchvision.models import resnet18
 
 
 def weights_init_normal(m):
-    if type(m) == nn.Conv:
+    classname = m.__class__.__name__
+    if classname.find("Conv") != -1:
         torch.nn.init.normal_(m.weight.data, 0.0, 0.02)
-    elif type(m) == nn.BatchNorm2d:
+    elif classname.find("BatchNorm2d") != -1:
         torch.nn.init.normal_(m.weight.data, 1.0, 0.02)
         torch.nn.init.constant_(m.bias.data, 0.0)
-
+        
 class UNetDown(nn.Module):
     def __init__(self, in_size, out_size, normalize=True, dropout=0.0, gpu_ids=[]):
         super(UNetDown, self).__init__()
